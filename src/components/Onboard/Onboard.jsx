@@ -83,7 +83,7 @@ const Onboard = () => {
               buttonStyle={style.secondaryButton}
               titleStyle={style.secondaryButtonTitle}
               containerStyle={style.button}
-              onPress={() => navigation.navigate("ChangePasswordForm")}
+              onPress={skipOnBoard}
             >
               LEWATI
             </Button>

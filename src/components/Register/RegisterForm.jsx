@@ -56,10 +56,12 @@ const RegisterForm = () => {
       paddingHorizontal: 30,
       paddingVertical: 30,
       borderRadius: 30,
-      height: "90%",
+      height: "70%",
       width: "80%",
       position: "absolute",
-      top: 50,
+      alignSelf: "center",
+      top: "40%",
+      marginTop: "-40%",
       zIndex: 999,
       alignSelf: "center",
       backgroundColor: theme.colors.white,
@@ -229,6 +231,7 @@ const RegisterForm = () => {
         }
       }
     } catch (e) {
+      console.log(e.response);
       if (e?.response?.status === 422) {
         setErrors(errors => ({ ...errors, ...e.response.data.error.data }));
       }
@@ -283,7 +286,7 @@ const RegisterForm = () => {
           placeholder="Masukkan email anda"
           value={email}
         />
-        <ErrorText errors={errors.phoneNumber} />
+        {/* <ErrorText errors={errors.phoneNumber} />
         <Input
           errorStyle={style.inputErrorStyle}
           inputStyle={style.inputText}
@@ -296,7 +299,7 @@ const RegisterForm = () => {
           placeholder="Masukkan nomor telepon anda"
           keyboardType="phone-pad"
           value={phoneNumber}
-        />
+        /> */}
         <ErrorText errors={errors.password} />
         <Input
           errorStyle={style.inputErrorStyle}
@@ -338,8 +341,8 @@ const RegisterForm = () => {
           value={confirmationPassword}
         />
         <ErrorText errors={errors.securityQuestion} />
-        <Typography variant="text2Medium">Pertanyaan Keamanan</Typography>
-        <SelectDropdown
+        {/* <Typography variant="text2Medium">Pertanyaan Keamanan</Typography> */}
+        {/* <SelectDropdown
           data={securityQuestions}
           onSelect={(selectedItem, index) =>
             handleSecurityQuestionChange(selectedItem, index)
@@ -368,10 +371,10 @@ const RegisterForm = () => {
           rowStyle={style.dropdown1RowStyle}
           rowTextStyle={style.dropdown1RowTxtStyle}
           defaultValue={securityQuestions[0]}
-        />
+        /> */}
 
-        <ErrorText errors={errors.securityQuestionAnswer} />
-        <Input
+        {/* <ErrorText errors={errors.securityQuestionAnswer} /> */}
+        {/* <Input
           errorStyle={style.inputErrorStyle}
           inputStyle={style.inputText}
           placeholderTextColor={theme.colors.grey}
@@ -384,7 +387,7 @@ const RegisterForm = () => {
           inputContainerStyle={style.input}
           value={securityQuestionAnswer}
           placeholder="Masukkan jawaban anda"
-        />
+        /> */}
         <Button containerStyle={[style.button]} onPress={() => handleSubmit()}>
           Daftar
         </Button>
