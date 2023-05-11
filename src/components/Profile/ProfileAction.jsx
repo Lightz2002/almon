@@ -5,6 +5,7 @@ import Typography from "../../global/Typography";
 import { useNavigation } from "@react-navigation/native";
 import { useUpdateUser, useUser } from "../../contexts/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { TouchableOpacity } from "react-native-web";
 
 const ProfileAction = () => {
   const { theme } = useTheme();
@@ -19,6 +20,7 @@ const ProfileAction = () => {
     });
 
     await AsyncStorage.setItem("token", "");
+    navigation.navigate("Login");
   };
 
   const style = StyleSheet.create({
@@ -38,31 +40,64 @@ const ProfileAction = () => {
     },
   });
 
-  return (
-    <View style={[style.container]}>
-      {!user?.isAuthenticated && (
-        <ListItem
-          style={[style.firstList]}
-          onPress={() => navigation.navigate("Login")}
-        >
+  let authenticatedContent = (
+    <ListItem
+      style={[style.firstList]}
+      onPress={() => navigation.navigate("Login")}
+    >
+      <Icon
+        name="login"
+        type="ant-design"
+        containerStyle={{
+          borderRadius: 50,
+          padding: 10,
+          backgroundColor: theme.colors.lighter,
+        }}
+      />
+
+      <ListItem.Content>
+        <ListItem.Title>
+          <Typography>Daftar atau Masuk</Typography>
+        </ListItem.Title>
+      </ListItem.Content>
+    </ListItem>
+  );
+
+  if (user?.isAuthenticated) {
+    authenticatedContent = (
+      <>
+        <ListItem onPress={() => navigation.navigate("Allocation Summary")}>
           <Icon
-            name="login"
-            type="ant-design"
+            name="file-download-outline"
+            type="material-community"
             containerStyle={{
               borderRadius: 50,
               padding: 10,
               backgroundColor: theme.colors.lighter,
             }}
           />
-
           <ListItem.Content>
             <ListItem.Title>
-              <Typography>Daftar atau Masuk</Typography>
+              <Typography>Rekap Pengeluaran</Typography>
             </ListItem.Title>
           </ListItem.Content>
         </ListItem>
-      )}
-      <ListItem>
+
+        <Button
+          color={theme.colors.error}
+          containerStyle={[style.buttonLogout]}
+          onPress={logout}
+        >
+          Keluar
+        </Button>
+      </>
+    );
+  }
+  return (
+    <View style={[style.container]}>
+      {authenticatedContent}
+
+      {/* <ListItem>
         <Icon
           name="exclamationcircleo"
           type="ant-design"
@@ -77,33 +112,7 @@ const ProfileAction = () => {
             <Typography>Feedback</Typography>
           </ListItem.Title>
         </ListItem.Content>
-      </ListItem>
-      <ListItem>
-        <Icon
-          name="file-download-outline"
-          type="material-community"
-          containerStyle={{
-            borderRadius: 50,
-            padding: 10,
-            backgroundColor: theme.colors.lighter,
-          }}
-        />
-        <ListItem.Content>
-          <ListItem.Title>
-            <Typography>Rekap Pengeluaran</Typography>
-          </ListItem.Title>
-        </ListItem.Content>
-      </ListItem>
-
-      {user?.isAuthenticated && (
-        <Button
-          color={theme.colors.error}
-          containerStyle={[style.buttonLogout]}
-          onPress={logout}
-        >
-          Keluar
-        </Button>
-      )}
+      </ListItem> */}
     </View>
   );
 };
