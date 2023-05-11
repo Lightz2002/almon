@@ -22,7 +22,8 @@ const Login = () => {
         if (data) {
           data.isAuthenticated = true;
           updateUser(data);
-          navigation.navigate("Home");
+          let navigateTo = +data.monthly_salary ? "Home" : "Allocation";
+          navigation.navigate(navigateTo);
         }
         setIsLoading(false);
       } catch (e) {

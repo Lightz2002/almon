@@ -1,7 +1,7 @@
 import { Button, Input, useTheme } from "@rneui/themed";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { validateForgetPassword } from "../../api";
+import { sendForgetPasswordEmail } from "../../api";
 import Background from "../../global/Background";
 import Typography from "../../global/Typography";
 import ErrorText from "../../global/ErrorText";
@@ -10,6 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const ChangePasswordForm = () => {
   const { theme } = useTheme();
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const style = StyleSheet.create({
@@ -17,11 +18,10 @@ const ChangePasswordForm = () => {
       paddingHorizontal: 30,
       paddingVertical: 30,
       borderRadius: 30,
-      height: "50%",
       width: "80%",
       position: "absolute",
       top: 50,
-      marginTop: "50%",
+      marginTop: "60%",
       zIndex: 999,
       alignSelf: "center",
       backgroundColor: theme.colors.white,
@@ -74,53 +74,27 @@ const ChangePasswordForm = () => {
   });
 
   const defaultError = {
-    username: [],
     email: [],
-    security_question_answer: [],
     message: [],
   };
 
   const [errors, setErrors] = useState(defaultError);
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
-  const [securityQuestionAnswer, setSecurityQuestionAnswer] = useState("");
 
   const handleEmailChange = newEmail => {
     setEmail(newEmail);
   };
 
-  const handleSecurityQuestionAnswerChange = newSecurityQuestionAnswer => {
-    setSecurityQuestionAnswer(newSecurityQuestionAnswer);
-  };
-
-  const handleUsernameChange = newUsername => {
-    setUsername(newUsername);
-  };
-
   const resetInput = () => {
     setEmail("");
-    setSecurityQuestionAnswer("");
-    setUsername("");
   };
 
   const handleValidation = () => {
     let validationError = { ...defaultError };
     let valid = true;
-    if (!username) {
-      validationError.username.push("Username wajib diisi");
-    }
 
     if (!email) {
       validationError.email.push("Email wajib diisi");
-    }
-
-    if (!securityQuestionAnswer) {
-      validationError.security_question_answer.push(
-        "Jawaban keamanan wajib diisi"
-      );
-    }
-
-    if (!username || !email || !securityQuestionAnswer) {
       valid = false;
     }
 
@@ -130,30 +104,23 @@ const ChangePasswordForm = () => {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
       let valid = handleValidation();
-
       if (valid) {
         const credentials = {
           email,
-          username,
-          security_question_answer: securityQuestionAnswer,
         };
-        let data = await validateForgetPassword(credentials);
+        let data = await sendForgetPasswordEmail(credentials);
         if (data.status === 200) {
-          await AsyncStorage.setItem("forgetPasswordToken", data.data.token);
-          const forgetPasswordCredential = JSON.stringify({
-            username: username,
-            email: email,
-          });
-          await AsyncStorage.setItem(
-            "forgetPasswordCredential",
-            forgetPasswordCredential
-          );
+          setIsLoading(false);
+          await AsyncStorage.setItem("email", email);
           resetInput();
           navigation.navigate("ChangePasswordForm2");
         }
       }
+      setIsLoading(false);
     } catch (e) {
+      setIsLoading(false);
       if (e?.response?.status === 422) {
         if (e.response.data.error.data) {
           setErrors(error => {
@@ -175,28 +142,13 @@ const ChangePasswordForm = () => {
           variant="bodyMedium"
           color={theme.colors.primary}
         >
-          Ganti
-          <Typography variant="bodyMedium"> Kata Sandi</Typography>
+          Verifikasi
+          <Typography variant="bodyMedium"> Email</Typography>
         </Typography>
-        <ErrorText errors={errors.message} />
 
         {/* Inputs */}
         <View style={[style.formGroupContainer]}>
-          <ErrorText errors={errors.username} />
-          <Input
-            errorStyle={style.inputErrorStyle}
-            inputStyle={style.inputText}
-            placeholderTextColor={theme.colors.grey}
-            onChangeText={handleUsernameChange}
-            containerStyle={style.inputContainerStyle}
-            label={"Username"}
-            labelStyle={style.label}
-            inputContainerStyle={style.input}
-            placeholder="Masukkan username anda"
-            value={username}
-          />
-
-          <ErrorText errors={errors.email} />
+          <ErrorText errors={[...errors.email, ...errors.message]} />
           <Input
             errorStyle={style.inputErrorStyle}
             inputStyle={style.inputText}
@@ -209,23 +161,17 @@ const ChangePasswordForm = () => {
             placeholder="Masukkan email anda"
             value={email}
           />
-
-          <ErrorText errors={errors.security_question_answer} />
-          <Input
-            errorStyle={style.inputErrorStyle}
-            inputStyle={style.inputText}
-            placeholderTextColor={theme.colors.grey}
-            onChangeText={handleSecurityQuestionAnswerChange}
-            containerStyle={style.inputContainerStyle}
-            label={"Jawaban"}
-            labelStyle={style.label}
-            inputContainerStyle={style.input}
-            placeholder="Masukkan jawaban keamanan anda"
-            value={securityQuestionAnswer}
-          />
+          <Typography variant="small" color={theme.colors.grey}>
+            Token verifikasi akan dikirimkan ke email
+          </Typography>
         </View>
 
-        <Button containerStyle={style.button} onPress={handleSubmit}>
+        <Button
+          containerStyle={style.button}
+          onPress={handleSubmit}
+          type="solid"
+          loading={isLoading}
+        >
           Selanjutnya
         </Button>
       </View>

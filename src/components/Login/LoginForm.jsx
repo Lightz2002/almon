@@ -28,7 +28,7 @@ const LoginForm = () => {
     container: {
       padding: 30,
       borderRadius: 30,
-      height: "60%",
+      height: 500,
       width: "80%",
       position: "absolute",
       top: "50%",
@@ -140,9 +140,10 @@ const LoginForm = () => {
       if (data) {
         data.isAuthenticated = true;
         updateUser(data);
-        await AsyncStorage.setItem("initialRoute", "Home");
+        console.log(+data.monthly_salary);
+        let navigateTo = +data.monthly_salary ? "Home" : "Allocation";
+        navigation.navigate(navigateTo);
       }
-      navigation.navigate("Home");
       resetInput();
     } catch (e) {
       if (e?.response?.status === 401 || e?.response?.status === 422) {
