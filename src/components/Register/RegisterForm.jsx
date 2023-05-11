@@ -56,7 +56,7 @@ const RegisterForm = () => {
       paddingHorizontal: 30,
       paddingVertical: 30,
       borderRadius: 30,
-      height: "70%",
+      height: 600,
       width: "80%",
       position: "absolute",
       alignSelf: "center",
@@ -221,8 +221,8 @@ const RegisterForm = () => {
           password,
           phone_number: phoneNumber,
           email,
-          security_question_id: securityQuestion.id,
-          security_question_answer: securityQuestionAnswer,
+          // security_question_id: securityQuestion.id,
+          // security_question_answer: securityQuestionAnswer,
         };
         const response = await register(data);
         if (response?.status === 201) {
@@ -231,7 +231,6 @@ const RegisterForm = () => {
         }
       }
     } catch (e) {
-      console.log(e.response);
       if (e?.response?.status === 422) {
         setErrors(errors => ({ ...errors, ...e.response.data.error.data }));
       }
