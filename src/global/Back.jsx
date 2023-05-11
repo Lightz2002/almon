@@ -3,7 +3,9 @@ import { Icon, useTheme } from "@rneui/themed";
 import React from "react";
 import { StyleSheet } from "react-native";
 
-const Back = ({ navigateTo }) => {
+const Back = ({ navigateTo, colorType = "dark" }) => {
+  const { theme } = useTheme();
+
   // const { name, type, size, color } = icon;
   const style = StyleSheet.create({
     iconContainer: {
@@ -11,7 +13,6 @@ const Back = ({ navigateTo }) => {
     },
   });
   const navigation = useNavigation();
-  const { theme } = useTheme();
 
   const handleNavigation = () => {
     navigation.navigate(navigateTo);
@@ -23,7 +24,7 @@ const Back = ({ navigateTo }) => {
       size={24}
       type="ant-design"
       containerStyle={style.iconContainer}
-      color={theme.colors.white}
+      color={colorType === "dark" ? theme.colors.white : theme.colors.primary}
       onPress={handleNavigation}
     ></Icon>
   );

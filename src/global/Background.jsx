@@ -9,6 +9,9 @@ const Background = ({ children }) => {
   const style = StyleSheet.create({
     container: {
       position: "relative",
+      // backgroundColor: "red",
+      flex: 1,
+      minHeight: "100%",
     },
 
     top: {
@@ -16,23 +19,38 @@ const Background = ({ children }) => {
       alignItems: "center",
       backgroundColor: theme.colors.white,
       padding: 50,
+      position: "relative",
     },
 
     bottom: {
-      flexBasis: "40%",
       borderTopRightRadius: 30,
       borderTopLeftRadius: 30,
       backgroundColor: theme.colors.primary,
+      flexGrow: 1,
     },
   });
   return (
-    <View>
+    <View style={[style.container]}>
       <View style={[style.top]}>
         <Image
           source={Logo}
+          containerStyle={{
+            width: "80%",
+            height: "100%",
+            objectFit: "cover",
+            display: "flex",
+            justifyContent: "center",
+            position: "relative",
+          }}
           style={{
-            width: 100,
-            height: 100,
+            width: 120,
+            height: 110,
+            position: "absolute",
+            top: 50,
+            left: 50,
+            objectFit: "cover",
+            alignSelf: "center",
+            zIndex: 9999,
           }}
         />
       </View>
