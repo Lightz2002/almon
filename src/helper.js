@@ -33,12 +33,6 @@ export const formatNumber = (number, options = "default") => {
       break;
   }
 
-  // console.log(
-  //   "Raw: ",
-  //   number,
-  //   "Nominal: ",
-  //   new Intl.NumberFormat("id-ID", formatOptions).format(number)
-  // );
   return new Intl.NumberFormat("id-ID", formatOptions)
     .format(number)
     .replace(/^(\D+)/, "$1 ")
@@ -59,6 +53,12 @@ export const formatDate = (date, format = "default") => {
       return `${dd}-${mm}-${y}`;
     case "yyyy-mm-dd":
       return `${y}-${mm}-${dd}`;
+    case "yyyy-m-dd":
+      options = { ...options, month: "short" };
+      break;
+    case "full":
+      options = { ...options, weekday: "long", month: "long" };
+      break;
   }
   return date.toLocaleString("id-Id", options);
 };
