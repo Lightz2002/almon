@@ -6,18 +6,23 @@ import { UserProvider } from "./src/contexts/UserContext";
 import { fetchFonts } from "./src/helper";
 import Routes from "./Routes";
 import { StatusBar } from "react-native";
+import { ExpenseProvider } from "./src/contexts/expenseContext";
 
 const theme = createTheme({
   lightColors: {
+    dark: "#296183",
     primary: "#45A2DB",
     light: "#99C8E4",
     lighter: "#B1D7EE",
-    lightest: "##BCEBF7",
+    lightest: "#BCEBF7",
+    bg: "#ecf6fb",
     error: "#FF4D4D",
     success: "#35CB43",
     grey: "#A1A1A1",
     grey2: "#A2A2A2",
     grey3: "#EEEEEE",
+    greyBg: "#E3E3E3",
+    greyDark: "#616161",
     white: "#fff",
     black: "#000",
   },
@@ -63,9 +68,11 @@ export default function App() {
     <SafeAreaProvider>
       <ThemeProvider theme={theme}>
         <UserProvider>
-          {/* <StatusBar> */}
-          <Routes onLayoutRootView={onLayoutRootView}></Routes>
-          {/* </StatusBar> */}
+          <ExpenseProvider>
+            {/* <StatusBar> */}
+            <Routes onLayoutRootView={onLayoutRootView}></Routes>
+            {/* </StatusBar> */}
+          </ExpenseProvider>
         </UserProvider>
       </ThemeProvider>
     </SafeAreaProvider>
