@@ -6,33 +6,36 @@ import Typography from "../../global/Typography";
 const AllocationListHeader = () => {
   const style = StyleSheet.create({
     container: {
-      padding: 0,
+      maxWidth: "100%",
+      paddingVertical: 5,
+      paddingLeft: 5,
     },
 
     listContent: {
       width: "100%",
-      flexDirection: "row",
       justifyContent: "flex-start",
+      flexDirection: "row",
       padding: 0,
       margin: 0,
     },
 
     firstChild: {
       flexBasis: "5%",
-      paddingHorizontal: 10,
+      paddingHorizontal: 2,
       marginRight: 5,
     },
 
     secondChild: {
-      flexBasis: "32%",
+      flexBasis: "35%",
     },
 
     thirdChild: {
-      flexBasis: "30%",
+      flexBasis: "23%",
     },
 
     fourthChild: {
-      flexBasis: "30%",
+      flexBasis: "40%",
+      paddingRight: 20,
     },
   });
   return (
@@ -50,7 +53,9 @@ const AllocationListHeader = () => {
           </Typography>
         </View>
         <View style={[style.fourthChild]}>
-          <Typography variant="titleMedium">Jumlah</Typography>
+          <Typography variant="titleMedium" textAlign="right">
+            Jumlah
+          </Typography>
         </View>
       </ListItem.Content>
     </ListItem>

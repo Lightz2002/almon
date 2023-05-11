@@ -51,13 +51,13 @@ const AllocationSalary = ({ handleSalaryChange, salary, allocations }) => {
     },
   ];
 
-  // allocations = allocations.map(allocation => {
-  //   return {
-  //     name: allocation.expense_category_name,
-  //     amount: +allocation.amount,
-  //     color: allocation.color,
-  //   };
-  // });
+  allocations = allocations.map(allocation => {
+    return {
+      name: allocation.expense_category_name,
+      amount: +allocation.amount,
+      color: allocation.color,
+    };
+  });
   if (allocations.length > 0) pieData = allocations;
 
   return (
@@ -70,6 +70,7 @@ const AllocationSalary = ({ handleSalaryChange, salary, allocations }) => {
         ) : (
           <Input
             placeholder="Masukkan gaji anda disini"
+            placeholderTextColor={theme.colors.grey}
             inputContainerStyle={style.input}
             containerStyle={{ paddingHorizontal: 0 }}
             keyboardType="phone-pad"

@@ -2,16 +2,18 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import AllocationList from "./AllocationList";
 import AllocationSalary from "./AllocationSalary";
-import { useUser } from "../../contexts/UserContext";
+import { useUpdateUser, useUser } from "../../contexts/UserContext";
 import { generateAllocation, getAllocation, updateSalary } from "../../api";
 import Loading from "../../global/Loading";
+import { useIsFocused } from "@react-navigation/native";
 
 const Allocation = () => {
   const user = useUser();
+  const isFocused = useIsFocused();
   const [allocations, setAllocations] = useState([]);
   const [salary, setSalary] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
-
+  const updateUser = useUpdateUser();
   useEffect(() => {
     const fetchAllocation = async () => {
       try {
@@ -35,15 +37,20 @@ const Allocation = () => {
       } catch (e) {}
     };
 
-    fetchAllocation();
-  }, []);
+    if (isFocused) {
+      fetchAllocation();
+    }
+  }, [isFocused]);
 
   const handleSubmitSalary = async () => {
     try {
       let response = await updateSalary({
         monthly_salary: salary,
       });
-      if (response.status === 200) response = response.data.data;
+      if (response.status === 200) {
+        response = response.data.data;
+        updateUser({ ...user, monthly_salary: salary });
+      }
       setAllocations(response);
     } catch (e) {
       console.log(e.response);

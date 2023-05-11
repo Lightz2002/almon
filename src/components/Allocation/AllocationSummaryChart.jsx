@@ -11,7 +11,6 @@ const AllocationSummaryChart = ({ expenseRemainInfo }) => {
   const { theme } = useTheme();
   const { expenses, salary } = expenseRemainInfo;
   const usedPercentage = expenses / salary < 1 ? expenses / salary : 1;
-  console.log(usedPercentage);
   const chartConfig = {
     backgroundColor: theme.colors.primary,
     backgroundGradientFrom: theme.colors.primary,
@@ -29,7 +28,8 @@ const AllocationSummaryChart = ({ expenseRemainInfo }) => {
       justifyContent: "center",
       alignItems: "center",
       padding: 0,
-      flex: 1.5,
+      paddingVertical: 25,
+      flex: 1,
     },
 
     progressChart: {

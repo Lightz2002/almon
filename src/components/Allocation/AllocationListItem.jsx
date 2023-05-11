@@ -8,8 +8,8 @@ const AllocationListItem = ({ allocation }) => {
   const { name, percentage, amount, color } = allocation;
   const style = StyleSheet.create({
     listParent: {
-      padding: 0,
-      marginVertical: 5,
+      paddingVertical: 5,
+      paddingLeft: 5,
     },
 
     listContent: {
@@ -22,20 +22,21 @@ const AllocationListItem = ({ allocation }) => {
 
     firstChild: {
       flexBasis: "5%",
-      marginRight: 5,
       paddingHorizontal: 2,
+      marginRight: 5,
     },
 
     secondChild: {
-      flexBasis: "32%",
+      flexBasis: "35%",
     },
 
     thirdChild: {
-      flexBasis: "30%",
+      flexBasis: "23%",
     },
 
     fourthChild: {
-      flexBasis: "30%",
+      flexBasis: "40%",
+      paddingRight: 20,
     },
   });
   return (
@@ -56,7 +57,9 @@ const AllocationListItem = ({ allocation }) => {
           <Typography textAlign="center">{percentage} %</Typography>
         </View>
         <View style={[style.fourthChild]}>
-          <Typography>{formatNumber(amount, "no-minimum-fraction")}</Typography>
+          <Typography textAlign="right">
+            {formatNumber(amount, "no-minimum-fraction")}
+          </Typography>
         </View>
       </ListItem.Content>
     </ListItem>
