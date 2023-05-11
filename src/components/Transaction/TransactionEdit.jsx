@@ -2,9 +2,9 @@ import { useTheme } from "@rneui/themed";
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import Alert from "../../global/Alert";
-import ExpenseEditForm from "./ExpenseEditForm";
+import TransactionEditForm from "./TransactionEditForm";
 
-const ExpenseEdit = () => {
+const TransactionEdit = () => {
   const [alertVisible, setAlertVisible] = useState(false);
   const { theme } = useTheme();
   const style = StyleSheet.create({
@@ -27,7 +27,7 @@ const ExpenseEdit = () => {
 
   return (
     <View style={[style.container]}>
-      <ExpenseEditForm setAlertVisible={setAlertVisible} />
+      <TransactionEditForm setAlertVisible={setAlertVisible} />
       <Alert
         style={style.successAlert}
         visible={alertVisible}
@@ -37,4 +37,4 @@ const ExpenseEdit = () => {
   );
 };
 
-export default ExpenseEdit;
+export default TransactionEdit;

@@ -1,54 +1,39 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import { useIsFocused, useRoute } from "@react-navigation/native";
+import { useIsFocused } from "@react-navigation/native";
 import { Button, Icon, Input, useTheme } from "@rneui/themed";
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import SelectDropdown from "react-native-select-dropdown";
-import { expenseCategory, expenseEdit, expenseGet } from "../../api";
+import { transactionCategory, transactionCreate } from "../../api";
 import ErrorText from "../../global/ErrorText";
-import Loading from "../../global/Loading";
 import Typography from "../../global/Typography";
 import { formatDate, formatNumber } from "../../helper";
 
-const ExpenseEditForm = ({ setAlertVisible }) => {
+const TransactionForm = ({ setAlertVisible }) => {
   const defaultError = {
     amount: [],
     note: [],
     date: [],
     expense_category_id: [],
   };
-  const route = useRoute();
-  const expenseId = route.params?.expenseId;
-  const [isLoading, setIsLoading] = useState(true);
   const [expenseCategories, setExpenseCategories] = useState([]);
+  const [visible, setVisible] = useState(false);
   const isFocused = useIsFocused();
   const [errors, setErrors] = useState(defaultError);
   const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState({});
   const [note, setNote] = useState("");
   const [date, setDate] = useState(new Date());
-  const { theme } = useTheme();
 
   useEffect(() => {
     const fetchExpenseCategories = async () => {
       try {
-        let data = await expenseGet(expenseId);
-        let categoryId = "";
-        if (data) {
-          data = data.data.data;
-          setAmount(data.amount);
-          setDate(new Date(data.date));
-          setNote(data.note);
-          categoryId = data.expense_category_id;
-        }
-
-        let data2 = await expenseCategory();
-        if (data2) data2 = data2.data.data;
-        setExpenseCategories(data2);
-        setCategory(data2.find(data => data.id == categoryId));
-        setIsLoading(false);
+        let data = await transactionCategory();
+        if (data) data = data.data.data;
+        setExpenseCategories(data);
+        setCategory(data[0]);
       } catch (e) {
-        setIsLoading(false);
+        setVisible(true);
       }
     };
 
@@ -57,9 +42,7 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
     }
   }, [isFocused]);
 
-  if (isLoading) {
-    return <Loading />;
-  }
+  const { theme } = useTheme();
 
   const style = StyleSheet.create({
     form: {
@@ -130,7 +113,7 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
     },
 
     dateDisabledInput: {
-      color: theme.colors.black,
+      color: "#000",
     },
 
     textarea: {
@@ -184,9 +167,12 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
       };
 
       if (valid) {
-        const response = await expenseEdit(expenseId, data);
-        if (response?.status === 200) {
+        const response = await transactionCreate(data);
+        if (response?.status === 201) {
           setAlertVisible(true);
+          setAmount(0);
+          setCategory(expenseCategories[0]);
+          setDate(new Date());
           setTimeout(() => setAlertVisible(false), 2000);
         }
       }
@@ -232,7 +218,7 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
       {/* title */}
       <View style={[style.formTitle]}>
         <Typography variant="headerMedium" textAlign="center">
-          Ubah
+          Masukkan
         </Typography>
         <Typography
           variant="headerMedium"
@@ -281,15 +267,19 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
           buttonStyle={style.dropdown1BtnStyle}
           buttonTextStyle={style.dropdown1BtnTxtStyle}
           buttonTextAfterSelection={(selectedItem, index) => {
+            // text represented after item is selected
+            // if data array is an array of objects then return selectedItem.property to render after item is selected
             return selectedItem.name;
           }}
           rowTextForSelection={(item, index) => {
+            // text represented for each item in dropdown
+            // if data array is an array of objects then return item.property to represent item in dropdown
             return item.name;
           }}
           dropdownStyle={style.dropdownDropdownStyle}
           rowStyle={style.dropdown1RowStyle}
           rowTextStyle={style.dropdown1RowTxtStyle}
-          defaultValue={category}
+          defaultValue={expenseCategories[0]}
         />
 
         <TouchableOpacity style={[style.inputDate]} onPress={showDate}>
@@ -301,6 +291,7 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
             label="Tanggal"
             labelStyle={style.label}
             placeholder="dd/mm/yyyy"
+            placeholderTextColor={theme.colors.black}
             value={formatDate(date)}
             disabled
             disabledInputStyle={style.dateDisabledInput}
@@ -312,9 +303,9 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
           label="Catatan"
           labelStyle={style.label}
           placeholder="contoh: beli mobil"
+          placeholderTextColor={theme.colors.grey}
           multiline={true}
           onChangeText={note => handleNoteChange(note)}
-          value={note}
         />
 
         <Button
@@ -329,4 +320,4 @@ const ExpenseEditForm = ({ setAlertVisible }) => {
   );
 };
 
-export default ExpenseEditForm;
+export default TransactionForm;

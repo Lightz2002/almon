@@ -7,19 +7,21 @@ import Register from "./src/components/Register/Register";
 import Login from "./src/components/Login/Login";
 import Allocation from "./src/components/Allocation/Allocation";
 import Profile from "./src/components/Profile/Profile";
-import ExpenseCreate from "./src/components/Expense/ExpenseCreate";
+import TransactionCreate from "./src/components/Transaction/TransactionCreate";
 import UnauthenticatedDialog from "./src/global/UnauthenticatedDialog";
 import { useTheme } from "@rneui/themed";
 import Back from "./src/global/Back";
 import { useUser } from "./src/contexts/UserContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import InitialScreen from "./src/components/InitialScreen";
-import ExpenseEdit from "./src/components/Expense/ExpenseEdit";
+import TransactionEdit from "./src/components/Transaction/TransactionEdit";
 import AllocationSummary from "./src/components/Allocation/AllocationSummary";
 import SplashScreen from "./src/components/Onboard/SplashScreen";
 import Onboard from "./src/components/Onboard/Onboard";
+import ProfileForm from "./src/components/Profile/ProfileForm";
 import ChangePasswordForm from "./src/components/ChangePassword/ChangePasswordForm";
 import ChangePasswordForm2 from "./src/components/ChangePassword/ChangePasswordForm2";
+import ChangePasswordForm3 from "./src/components/ChangePassword/ChangePasswordForm3";
 
 const Routes = ({ onLayoutRootView }) => {
   const { theme } = useTheme();
@@ -67,12 +69,36 @@ const Routes = ({ onLayoutRootView }) => {
           <Stack.Screen
             name="ChangePasswordForm"
             component={ChangePasswordForm}
-            options={{ headerBackVisible: false, headerShown: false }}
+            options={{
+              headerLeft: () => <Back navigateTo="Login" colorType="light" />,
+              headerStyle: {
+                backgroundColor: "white",
+              },
+            }}
           ></Stack.Screen>
           <Stack.Screen
             name="ChangePasswordForm2"
             component={ChangePasswordForm2}
-            options={{ headerBackVisible: false, headerShown: false }}
+            options={{
+              headerLeft: () => (
+                <Back navigateTo="ChangePasswordForm" colorType="light" />
+              ),
+              headerStyle: {
+                backgroundColor: "white",
+              },
+            }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="ChangePasswordForm3"
+            component={ChangePasswordForm3}
+            options={{
+              headerLeft: () => (
+                <Back navigateTo="ChangePasswordForm2" colorType="light" />
+              ),
+              headerStyle: {
+                backgroundColor: "white",
+              },
+            }}
           ></Stack.Screen>
           <Stack.Screen
             name="Login"
@@ -116,7 +142,7 @@ const Routes = ({ onLayoutRootView }) => {
           ></Stack.Screen>
           <Stack.Screen
             name="Add Expense"
-            component={ExpenseCreate}
+            component={TransactionCreate}
           ></Stack.Screen>
           <Stack.Screen
             name="Allocation"
@@ -125,7 +151,7 @@ const Routes = ({ onLayoutRootView }) => {
           ></Stack.Screen>
           <Stack.Screen
             name="Edit Expense"
-            component={ExpenseEdit}
+            component={TransactionEdit}
             options={{
               headerLeft: () => <Back navigateTo={"Home"} />,
             }}
@@ -138,6 +164,13 @@ const Routes = ({ onLayoutRootView }) => {
               headerLeft: () => <Back navigateTo={"Home"} />,
             }}
             initialParams={{ expenseId: null }}
+          ></Stack.Screen>
+          <Stack.Screen
+            name="ProfileForm"
+            component={ProfileForm}
+            options={{
+              headerLeft: () => <Back navigateTo={"Profile"} />,
+            }}
           ></Stack.Screen>
         </Stack.Navigator>
       </View>

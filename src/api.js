@@ -1,6 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
-import * as Font from "expo-font";
 
 const baseUri = axios.create({
   baseURL: "https://almon.ryankenidy.site/api",
@@ -56,6 +55,19 @@ export async function validateForgetPassword(credentials) {
   }
 }
 
+export async function sendForgetPasswordEmail(credentials) {
+  try {
+    return await baseUri.post("/send-forget-password-email", {
+      ...credentials,
+      validateStatus: function (status) {
+        return status === 201;
+      },
+    });
+  } catch (e) {
+    throw e;
+  }
+}
+
 export async function resetPassword(credentials) {
   try {
     const resetPasswordToken = await getResetPasswordToken();
@@ -98,6 +110,25 @@ export async function profile() {
   }
 }
 
+export async function updateUser(credentials, userId) {
+  try {
+    const token = await getToken();
+    return await baseUri.post(
+      `/users/${userId}`,
+      {
+        ...credentials,
+      },
+      {
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
+  } catch (e) {
+    throw e;
+  }
+}
+
 export async function updateSalary(monthlySalary) {
   try {
     const token = await getToken();
@@ -131,10 +162,10 @@ export async function expenseBudgetInfo() {
   }
 }
 
-export async function expenseList() {
+export async function transactionList() {
   try {
     const token = await getToken();
-    return await baseUri.get("/expense", {
+    return await baseUri.get("/transaction", {
       headers: {
         Authorization: token,
       },
@@ -144,10 +175,10 @@ export async function expenseList() {
   }
 }
 
-export async function expenseGet(expenseId) {
+export async function transactionGet(transactionId) {
   try {
     const token = await getToken();
-    return await baseUri.get(`/expense/${expenseId}`, {
+    return await baseUri.get(`/transaction/${transactionId}`, {
       headers: {
         Authorization: token,
       },
@@ -157,13 +188,13 @@ export async function expenseGet(expenseId) {
   }
 }
 
-export async function expenseCreate(expense) {
+export async function transactionCreate(transaction) {
   try {
     const token = await getToken();
     return await baseUri.post(
-      "/expense",
+      "/transaction",
       {
-        ...expense,
+        ...transaction,
       },
       {
         headers: {
@@ -176,13 +207,13 @@ export async function expenseCreate(expense) {
   }
 }
 
-export async function expenseEdit(expenseId, expense) {
+export async function transactionEdit(transactionId, transaction) {
   try {
     const token = await getToken();
     return await baseUri.put(
-      `/expense/${expenseId}`,
+      `/transaction/${transactionId}`,
       {
-        ...expense,
+        ...transaction,
       },
       {
         headers: {
@@ -209,10 +240,10 @@ export async function expenseSummary() {
 }
 
 /* expense - category */
-export async function expenseCategory() {
+export async function transactionCategory() {
   try {
     const token = await getToken();
-    return await baseUri.get("/expense-category", {
+    return await baseUri.get("/transaction-category", {
       headers: {
         Authorization: token,
       },

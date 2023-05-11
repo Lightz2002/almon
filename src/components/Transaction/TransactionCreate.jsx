@@ -1,11 +1,11 @@
 import { useIsFocused } from "@react-navigation/native";
 import { useTheme } from "@rneui/themed";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import Alert from "../../global/Alert";
-import ExpenseForm from "./ExpenseForm";
+import ExpenseForm from "./TransactionForm";
 
-const ExpenseCreate = () => {
+const TransactionCreate = () => {
   const { theme } = useTheme();
   const [alertVisible, setAlertVisible] = useState(false);
 
@@ -41,4 +41,4 @@ const ExpenseCreate = () => {
   );
 };
 
-export default ExpenseCreate;
+export default TransactionCreate;

@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import Typography from "../../global/Typography";
 import { formatDate, formatNumber } from "../../helper";
 
-const ExpenseDetail = ({ visible, setVisible, expense }) => {
+const TransactionDetail = ({ visible, setVisible, expense }) => {
   const { theme } = useTheme();
   const navigation = useNavigation();
   const style = StyleSheet.create({
@@ -100,13 +100,13 @@ const ExpenseDetail = ({ visible, setVisible, expense }) => {
           <Button
             containerStyle={style.button}
             type="outline"
-            onPress={() =>
+            onPress={() => {
               navigation.navigate({
                 name: "Edit Expense",
                 params: { expenseId: expense.id },
                 merge: true,
-              })
-            }
+              });
+            }}
           >
             Ubah
           </Button>
@@ -119,4 +119,4 @@ const ExpenseDetail = ({ visible, setVisible, expense }) => {
   );
 };
 
-export default ExpenseDetail;
+export default TransactionDetail;
