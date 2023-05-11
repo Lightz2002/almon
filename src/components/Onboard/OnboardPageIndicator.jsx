@@ -1,9 +1,12 @@
-import { Icon, useTheme } from "@rneui/themed";
+import { useNavigation } from "@react-navigation/native";
+import { Button, Icon, useTheme } from "@rneui/themed";
 import React from "react";
+import { TouchableOpacity } from "react-native";
 import { StyleSheet, View } from "react-native";
 
-const OnboardPageIndicator = ({ page }) => {
+const OnboardPageIndicator = ({ page, setPage }) => {
   const { theme } = useTheme();
+  const navigation = useNavigation();
   const style = StyleSheet.create({
     container: {
       alignSelf: "center",
@@ -17,19 +20,26 @@ const OnboardPageIndicator = ({ page }) => {
       marginRight: 10,
     },
   });
+
   return (
     <View style={style.container}>
       {[1, 2, 3].map(iconNumber => {
         return (
-          <Icon
+          <TouchableOpacity
             key={iconNumber}
-            name="circle"
-            type="font-awesome"
-            color={
-              page === iconNumber ? theme.colors.primary : theme.colors.lighter
-            }
-            containerStyle={style.icon}
-          />
+            onPress={() => setPage(iconNumber)}
+          >
+            <Icon
+              name="circle"
+              type="font-awesome"
+              color={
+                page === iconNumber
+                  ? theme.colors.primary
+                  : theme.colors.lighter
+              }
+              containerStyle={style.icon}
+            />
+          </TouchableOpacity>
         );
       })}
     </View>

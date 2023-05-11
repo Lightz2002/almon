@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { Image } from "@rneui/themed";
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
@@ -33,6 +33,7 @@ const SplashScreen = () => {
     },
   });
   const user = useUser();
+  const isFocused = useIsFocused();
   const updateUser = useUpdateUser();
   const Logo = require("../../../assets/images/logo.png");
   const Top = require("../../../assets/images/splash-top.png");
@@ -49,9 +50,12 @@ const SplashScreen = () => {
           data.isAuthenticated = true;
           updateUser(data);
         }
-        setTimeout(() => {
-          navigation.navigate("Home");
-        }, 500);
+
+        if (isFocused) {
+          setTimeout(() => {
+            navigation.navigate("Home");
+          }, 3000);
+        }
       } catch (e) {
         if (e?.response?.status === 401) {
           updateUser({
@@ -65,13 +69,13 @@ const SplashScreen = () => {
               params: { page: 1 },
               merge: true,
             });
-          }, 500);
+          }, 200);
         }
       }
     };
 
     validateToken();
-  }, []);
+  }, [isFocused]);
 
   return (
     <View style={[style.container]}>

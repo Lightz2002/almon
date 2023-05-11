@@ -4,10 +4,27 @@ import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import Typography from "../../global/Typography";
 import OnboardPageIndicator from "./OnboardPageIndicator";
+import GestureRecognizer, {
+  swipeDirections,
+} from "react-native-swipe-gestures";
 
 const Onboard = () => {
   const [page, setPage] = useState(1);
   const { theme } = useTheme();
+
+  function onSwipeLeft(gestureState) {
+    setPage(page => {
+      if (page >= 3) return page;
+      return page + 1;
+    });
+  }
+
+  function onSwipeRight(gestureState) {
+    setPage(page => {
+      if (page <= 1) return page;
+      return page - 1;
+    });
+  }
 
   const style = StyleSheet.create({
     container: {
@@ -83,9 +100,9 @@ const Onboard = () => {
               buttonStyle={style.secondaryButton}
               titleStyle={style.secondaryButtonTitle}
               containerStyle={style.button}
-              onPress={skipOnBoard}
+              onPress={() => navigation.navigate("SplashScreen")}
             >
-              LEWATI
+              Kembali
             </Button>
             <Button
               titleStyle={style.primaryButtonTitle}
@@ -108,9 +125,9 @@ const Onboard = () => {
               buttonStyle={style.secondaryButton}
               titleStyle={style.secondaryButtonTitle}
               containerStyle={style.button}
-              onPress={skipOnBoard}
+              onPress={() => setPage(1)}
             >
-              LEWATI
+              Kembali
             </Button>
             <Button
               titleStyle={style.primaryButtonTitle}
@@ -148,25 +165,30 @@ const Onboard = () => {
 
   return (
     <View style={[style.container]}>
-      <View style={[style.imageContainer]}>
-        <Image source={content.image} style={style.image} />
-      </View>
-      <View style={[style.contentContainer]}>
-        <Typography color={theme.colors.primary} variant="onboard">
-          {content.title}
-        </Typography>
-        <Typography
-          textAlign="center"
-          color={theme.colors.grey2}
-          variant="text"
-        >
-          {content.text}
-        </Typography>
-      </View>
+      <GestureRecognizer
+        onSwipeLeft={state => onSwipeLeft(state)}
+        onSwipeRight={state => onSwipeRight(state)}
+      >
+        <View style={[style.imageContainer]}>
+          <Image source={content.image} style={style.image} />
+        </View>
+        <View style={[style.contentContainer]}>
+          <Typography color={theme.colors.primary} variant="onboard">
+            {content.title}
+          </Typography>
+          <Typography
+            textAlign="center"
+            color={theme.colors.grey2}
+            variant="text"
+          >
+            {content.text}
+          </Typography>
+        </View>
 
-      <OnboardPageIndicator page={page} />
+        <OnboardPageIndicator page={page} setPage={setPage} />
 
-      <View style={[style.buttonContainer]}>{content.button}</View>
+        <View style={[style.buttonContainer]}>{content.button}</View>
+      </GestureRecognizer>
     </View>
   );
 };
