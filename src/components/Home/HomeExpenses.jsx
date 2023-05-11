@@ -3,9 +3,8 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import HomeExpensesList from "./HomeExpensesList";
 
-const HomeExpenses = ({ expenses, isLoading, setSelectedExpense }) => {
+const HomeExpenses = ({ isLoading, setSelectedExpense }) => {
   const { theme } = useTheme();
-
   const styles = StyleSheet.create({
     container: {
       flex: 2,
@@ -18,7 +17,6 @@ const HomeExpenses = ({ expenses, isLoading, setSelectedExpense }) => {
     <View style={[styles.container]}>
       <HomeExpensesList
         setSelectedExpense={setSelectedExpense}
-        expenses={expenses}
         isLoading={isLoading}
       />
     </View>

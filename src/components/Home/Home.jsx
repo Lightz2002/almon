@@ -2,22 +2,28 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import HomeNavbar from "./HomeNavbar";
 import HomeExpenses from "./HomeExpenses";
-import { profile, expenseBudgetInfo, expenseList } from "../../api";
+import { profile, expenseBudgetInfo, transactionList } from "../../api";
 import { useUpdateUser } from "../../contexts/UserContext";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useIsFocused } from "@react-navigation/native";
-import ExpenseDetail from "../Expense/ExpenseDetail";
+import ExpenseDetail from "../Transaction/TransactionDetail";
 import Loading from "../../global/Loading";
 import HomeExpensesAction from "./HomeExpensesAction";
+import {
+  ExpenseProvider,
+  useExpenses,
+  useUpdateExpense,
+  useUpdateExpenses,
+} from "../../contexts/expenseContext";
 
 const Home = () => {
   const [selectedExpense, setSelectedExpense] = useState([]);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [budgetInfo, setBudgetInfo] = useState({});
-  const updateUser = useUpdateUser();
-  const [expenses, setExpenses] = useState([]);
   const isFocused = useIsFocused();
+  const updateUser = useUpdateUser();
+  const expenses = useExpenses();
+  const updateExpenses = useUpdateExpenses();
 
   const styles = StyleSheet.create({
     container: {
@@ -44,11 +50,10 @@ const Home = () => {
         const data2 = await expenseBudgetInfo();
         if (data2) setBudgetInfo(data2.data);
 
-        let data3 = await expenseList();
-        if (data3) data3 = data3.data.data;
-        setExpenses(data3);
-
+        let data3 = await transactionList();
         if (data3) {
+          data3 = data3.data.data;
+          updateExpenses(data3);
           setIsLoading(false);
         }
       } catch (e) {
@@ -62,6 +67,8 @@ const Home = () => {
             salary: 0,
             remain: 0,
           });
+          setSelectedExpense([]);
+          updateExpenses({});
         }
         setIsLoading(false);
       }
@@ -70,6 +77,11 @@ const Home = () => {
     if (isFocused) {
       fetchUser();
     }
+
+    return () => {
+      setIsLoading(true);
+      setOverlayVisible(false);
+    };
   }, [isFocused]);
 
   const handleSelectedExpense = expense => {
@@ -85,7 +97,6 @@ const Home = () => {
     <View style={[styles.container]}>
       <HomeNavbar budgetInfo={budgetInfo} />
       <HomeExpenses
-        expenses={expenses}
         isLoading={isLoading}
         setSelectedExpense={handleSelectedExpense}
       />

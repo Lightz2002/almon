@@ -9,8 +9,10 @@ const HomeNavbarInfoRemain = ({ remain }) => {
   const style = StyleSheet.create({
     container: {
       padding: 10,
-      borderTopRightRadius: 10,
-      borderBottomRightRadius: 10,
+      borderRightColor: theme.colors.grey,
+      borderRightWidth: 1,
+      borderTopLeftRadius: 15,
+      borderBottomLeftRadius: 15,
       flex: 1,
       backgroundColor: theme.colors.white,
       justifyContent: "space-evenly",
@@ -20,7 +22,7 @@ const HomeNavbarInfoRemain = ({ remain }) => {
   return (
     <View style={[style.container]}>
       <Typography variant="text" color={theme.colors.primary}>
-        Sisa
+        Saldo
       </Typography>
       <Typography variant="text">{formatNumber(remain)}</Typography>
     </View>

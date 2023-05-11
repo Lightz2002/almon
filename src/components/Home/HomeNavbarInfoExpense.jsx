@@ -9,10 +9,9 @@ const HomeNavbarInfoExpense = ({ expense }) => {
   const style = StyleSheet.create({
     container: {
       padding: 10,
-      borderRightColor: theme.colors.grey,
-      borderRightWidth: 1,
-      borderTopLeftRadius: 15,
-      borderBottomLeftRadius: 15,
+
+      borderTopRightRadius: 10,
+      borderBottomRightRadius: 10,
       flex: 1,
       justifyContent: "space-evenly",
       shadowColor: theme.colors.lighter,

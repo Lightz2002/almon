@@ -29,8 +29,8 @@ const HomeNavbarInfo = ({ budgetInfo }) => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate("Allocation Summary")}>
       <View style={[style.navbarInfo]}>
-        <HomeNavbarInfoExpense expense={budgetInfo?.expenses} />
         <HomeNavbarInfoRemain remain={budgetInfo?.remain} />
+        <HomeNavbarInfoExpense expense={budgetInfo?.expenses} />
       </View>
     </TouchableOpacity>
   );

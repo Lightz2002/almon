@@ -2,36 +2,34 @@ import React from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import Loading from "../../global/Loading";
 import Typography from "../../global/Typography";
-import HomeExpensesListItem from "./HomeExpensesListItem";
+import HomeExpensesListGroup from "./HomeExpensesListGroup";
+import { useExpenses } from "../../contexts/expenseContext";
 
-const HomeExpensesList = ({ expenses, isLoading, setSelectedExpense }) => {
-  // let justifyContent = "center";
-  // let alignItems = "center";
+const HomeExpensesList = ({ isLoading, setSelectedExpense }) => {
+  const expenses = useExpenses();
   const style = StyleSheet.create({
     container: {
       flex: 1,
     },
   });
 
-  let content = <Typography>Masukkan Data Pengeluaranmu</Typography>;
+  let content = <Typography>Masukkan Data 1</Typography>;
 
   if (isLoading) {
     content = <Loading />;
   }
 
-  if (expenses.length > 0) {
-    content = expenses.map(expense => {
+  if (Object.keys(expenses).length > 0) {
+    content = Object.entries(expenses).map(([date, value]) => {
       return (
-        <HomeExpensesListItem
-          key={expense.id}
-          expense={expense}
+        <HomeExpensesListGroup
+          key={date}
+          expenses={value}
+          expenseDate={date}
           setSelectedExpense={setSelectedExpense}
         />
       );
     });
-
-    // justifyContent = "flex-start";
-    // alignItems = "strech";
   }
 
   return (
@@ -39,8 +37,6 @@ const HomeExpensesList = ({ expenses, isLoading, setSelectedExpense }) => {
       contentContainerStyle={{
         flexGrow: 1,
         paddingVertical: 10,
-        // justifyContent: justifyContent,
-        // alignItems: alignItems,
       }}
       style={[style.container]}
     >
