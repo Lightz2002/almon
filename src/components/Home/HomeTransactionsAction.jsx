@@ -4,7 +4,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { useUser } from "../../contexts/UserContext";
 
-const HomeExpensesAction = () => {
+const HomeTransactionsAction = () => {
   const { theme } = useTheme();
   const user = useUser();
   const navigation = useNavigation();
@@ -24,11 +24,14 @@ const HomeExpensesAction = () => {
   });
 
   // prettier-ignore
-  let redirectAddExpense, redirectSummary, redirectAllocation;
-  redirectAddExpense = redirectSummary = redirectAllocation = "Redirect Login";
+  let redirectAddTransaction, redirectSummary, redirectAllocation;
+  redirectAddTransaction =
+    redirectSummary =
+    redirectAllocation =
+      "Redirect Login";
 
   if (user?.isAuthenticated) {
-    redirectAddExpense = "Add Expense";
+    redirectAddTransaction = "Add Transaction";
     redirectAllocation = "Allocation";
     redirectSummary = "Allocation Summary";
   }
@@ -49,7 +52,7 @@ const HomeExpensesAction = () => {
         color={theme.colors.dark}
         containerStyle={{ marginBottom: 50 }}
         reverse
-        onPress={() => navigation.navigate(redirectAddExpense)}
+        onPress={() => navigation.navigate(redirectAddTransaction)}
       />
       <Icon
         size={48}
@@ -62,4 +65,4 @@ const HomeExpensesAction = () => {
   );
 };
 
-export default HomeExpensesAction;
+export default HomeTransactionsAction;

@@ -24,7 +24,12 @@ const HomeNavbarInfoRemain = ({ remain }) => {
       <Typography variant="text" color={theme.colors.primary}>
         Saldo
       </Typography>
-      <Typography variant="text">{formatNumber(remain)}</Typography>
+      <Typography
+        variant="text"
+        color={remain < 0 ? theme.colors.error : theme.colors.success}
+      >
+        {formatNumber(remain)}
+      </Typography>
     </View>
   );
 };

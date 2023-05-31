@@ -53,8 +53,7 @@ const RegisterForm = () => {
   }, [isFocused]);
   const style = StyleSheet.create({
     container: {
-      paddingHorizontal: 30,
-      paddingVertical: 30,
+      padding: 30,
       borderRadius: 30,
       height: 600,
       width: "80%",

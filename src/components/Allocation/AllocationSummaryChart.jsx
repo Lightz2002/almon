@@ -15,11 +15,16 @@ const AllocationSummaryChart = ({ expenseRemainInfo }) => {
     backgroundColor: theme.colors.primary,
     backgroundGradientFrom: theme.colors.primary,
     backgroundGradientTo: theme.colors.primary,
-    color: (opacity = 1, index) => {
-      return index != undefined
-        ? `rgba(0, 0, 0, ${opacity})`
-        : `rgba(255, 255, 255, ${opacity})`;
+    color: index => {
+      if (index == 0.2) {
+        return "rgba(0,0,0, 0.2)"; // Customize the color for progress value 0.5
+      }
+
+      if (usedPercentage == 1) return theme.colors.error;
+      else if (usedPercentage >= 0.5) return "orange";
+      else return theme.colors.success;
     },
+    fillShadowGradientTo: "rgba(0, 0, 0, 0.1)",
   };
   const data = [usedPercentage];
   const style = StyleSheet.create({
@@ -35,6 +40,7 @@ const AllocationSummaryChart = ({ expenseRemainInfo }) => {
     progressChart: {
       position: "absolute",
       alignSelf: "center",
+      color: "blue",
     },
   });
 

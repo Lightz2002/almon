@@ -1,26 +1,28 @@
 import { useTheme } from "@rneui/themed";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import HomeExpensesList from "./HomeExpensesList";
+import HomeTransactionsList from "./HomeTransactionsList";
 
-const HomeExpenses = ({ isLoading, setSelectedExpense }) => {
+const HomeTransactions = ({ isLoading, setSelectedTransaction }) => {
   const { theme } = useTheme();
+
   const styles = StyleSheet.create({
     container: {
       flex: 2,
       position: "relative",
       backgroundColor: theme.colors.white,
+      // ...contentStyle,
     },
   });
 
   return (
     <View style={[styles.container]}>
-      <HomeExpensesList
-        setSelectedExpense={setSelectedExpense}
+      <HomeTransactionsList
+        setSelectedTransaction={setSelectedTransaction}
         isLoading={isLoading}
       />
     </View>
   );
 };
 
-export default HomeExpenses;
+export default HomeTransactions;

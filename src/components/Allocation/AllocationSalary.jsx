@@ -53,7 +53,7 @@ const AllocationSalary = ({ handleSalaryChange, salary, allocations }) => {
 
   allocations = allocations.map(allocation => {
     return {
-      name: allocation.expense_category_name,
+      name: allocation.transaction_category_name,
       amount: +allocation.amount,
       color: allocation.color,
     };

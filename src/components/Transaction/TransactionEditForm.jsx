@@ -1,5 +1,9 @@
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import { useIsFocused, useRoute } from "@react-navigation/native";
+import {
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { Button, Icon, Input, useTheme } from "@rneui/themed";
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
@@ -13,45 +17,53 @@ import ErrorText from "../../global/ErrorText";
 import Loading from "../../global/Loading";
 import Typography from "../../global/Typography";
 import { formatDate, formatNumber } from "../../helper";
-import { useExpenses, useUpdateExpenses } from "../../contexts/expenseContext";
+import {
+  useTransactions,
+  useUpdateTransactions,
+} from "../../contexts/transactionContext";
 
 const TransactionEditForm = ({ setAlertVisible }) => {
+  const navigation = useNavigation();
   const defaultError = {
     amount: [],
     note: [],
     date: [],
-    expense_category_id: [],
+    transaction_category_id: [],
+    type: [],
   };
   const route = useRoute();
-  const expenseId = route.params?.expenseId;
+  const transactionId = route.params?.transactionId;
   const [isLoading, setIsLoading] = useState(true);
-  const [expenseCategories, setExpenseCategories] = useState([]);
+  const [transactionCategories, setTransactionCategories] = useState([]);
   const isFocused = useIsFocused();
   const [errors, setErrors] = useState(defaultError);
   const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState({});
-  const expenses = useExpenses();
-  const updateExpenses = useUpdateExpenses();
+  const transactions = useTransactions();
+  const [type, setType] = useState("pemasukan");
+  const updateTransactions = useUpdateTransactions();
   const [note, setNote] = useState("");
   const [date, setDate] = useState(new Date());
   const { theme } = useTheme();
+  const types = ["pemasukan", "pengeluaran"];
 
   useEffect(() => {
     const fetchExpenseCategories = async () => {
       try {
-        let data = await transactionGet(expenseId);
+        let data = await transactionGet(transactionId);
         let categoryId = "";
         if (data) {
           data = data.data.data;
           setAmount(data.amount);
           setDate(new Date(data.date));
           setNote(data.note);
-          categoryId = data.expense_category_id;
+          setType(data.type === "income" ? "pemasukan" : "pengeluaran");
+          categoryId = data.transaction_category_id;
         }
 
         let data2 = await transactionCategory();
         if (data2) data2 = data2.data.data;
-        setExpenseCategories(data2);
+        setTransactionCategories(data2);
         setCategory(data2.find(data => data.id == categoryId));
         setIsLoading(false);
       } catch (e) {
@@ -169,9 +181,14 @@ const TransactionEditForm = ({ setAlertVisible }) => {
     }
 
     if (!category?.id) {
-      validationError.expense_category_id.push(
-        "Jenis Pengeluaran wajib diisi "
+      validationError.transaction_category_id.push(
+        "Kategori Transaksi wajib diisi "
       );
+      valid = false;
+    }
+
+    if (!type) {
+      validationError.type.push("Tipe Transaksi wajib diisi ");
       valid = false;
     }
 
@@ -187,15 +204,16 @@ const TransactionEditForm = ({ setAlertVisible }) => {
         amount,
         date: formatDate(date, "yyyy-mm-dd"),
         note,
-        expense_category_id: category.id,
+        transaction_category_id: category.id,
+        type: type === "pemasukan" ? "income" : "expense",
       };
 
       if (valid) {
-        const response = await transactionEdit(expenseId, data);
+        const response = await transactionEdit(transactionId, data);
         if (response?.status === 200) {
-          // updateExpenses([...expenses, data]);
           setAlertVisible(true);
           setTimeout(() => setAlertVisible(false), 2000);
+          setTimeout(() => navigation.navigate("Home"), 2000);
         }
       }
     } catch (e) {
@@ -226,6 +244,10 @@ const TransactionEditForm = ({ setAlertVisible }) => {
     setCategory(selectedItem);
   };
 
+  const handleTypeChange = (selectedItem, index) => {
+    setType(selectedItem);
+  };
+
   const showDate = currentMode => {
     DateTimePickerAndroid.open({
       value: date,
@@ -247,12 +269,45 @@ const TransactionEditForm = ({ setAlertVisible }) => {
           textAlign="center"
           color={theme.colors.primary}
         >
-          Data Pengeluaran
+          Data Transaksi
         </Typography>
       </View>
 
       {/* Form Inputs */}
       <View style={[style.formInputContainer]}>
+        <ErrorText errors={errors.type} />
+        <Typography variant="textMedium">Jenis Transaksi</Typography>
+        <SelectDropdown
+          data={types}
+          onSelect={(selectedItem, index) =>
+            handleTypeChange(selectedItem, index)
+          }
+          defaultButtonText="Pilih jenis transaksi"
+          dropdownIconPosition={"right"}
+          renderDropdownIcon={isOpened => {
+            return (
+              <Icon
+                name={isOpened ? "chevron-up" : "chevron-down"}
+                type="font-awesome-5"
+                color={theme.colors.primary}
+                size={18}
+              />
+            );
+          }}
+          buttonStyle={style.dropdown1BtnStyle}
+          buttonTextStyle={style.dropdown1BtnTxtStyle}
+          buttonTextAfterSelection={(selectedItem, index) => {
+            return selectedItem;
+          }}
+          rowTextForSelection={(item, index) => {
+            return item;
+          }}
+          dropdownStyle={style.dropdownDropdownStyle}
+          rowStyle={style.dropdown1RowStyle}
+          rowTextStyle={style.dropdown1RowTxtStyle}
+          defaultValue={type}
+        />
+
         <ErrorText errors={errors.amount} />
         <Input
           inputContainerStyle={style.input}
@@ -267,14 +322,14 @@ const TransactionEditForm = ({ setAlertVisible }) => {
           value={formatNumber(amount, "no-currency")}
         />
 
-        <ErrorText errors={errors.expense_category_id} />
-        <Typography variant="textMedium">Jenis Pengeluaran</Typography>
+        <ErrorText errors={errors.transaction_category_id} />
+        <Typography variant="textMedium">Kategori Transaksi</Typography>
         <SelectDropdown
-          data={expenseCategories}
+          data={transactionCategories}
           onSelect={(selectedItem, index) =>
             handleCategoryChange(selectedItem, index)
           }
-          defaultButtonText="Pilih jenis pengeluaran"
+          defaultButtonText="Pilih kategori transaksi"
           dropdownIconPosition={"right"}
           renderDropdownIcon={isOpened => {
             return (
@@ -319,7 +374,7 @@ const TransactionEditForm = ({ setAlertVisible }) => {
           containerStyle={{ paddingHorizontal: 0 }}
           label="Catatan"
           labelStyle={style.label}
-          placeholder="contoh: beli mobil"
+          placeholder="contoh: nasi padang"
           multiline={true}
           onChangeText={note => handleNoteChange(note)}
           value={note}

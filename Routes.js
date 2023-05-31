@@ -141,7 +141,7 @@ const Routes = ({ onLayoutRootView }) => {
             }}
           ></Stack.Screen>
           <Stack.Screen
-            name="Add Expense"
+            name="Add Transaction"
             component={TransactionCreate}
           ></Stack.Screen>
           <Stack.Screen
@@ -150,12 +150,12 @@ const Routes = ({ onLayoutRootView }) => {
             options={{}}
           ></Stack.Screen>
           <Stack.Screen
-            name="Edit Expense"
+            name="Edit Transaction"
             component={TransactionEdit}
             options={{
               headerLeft: () => <Back navigateTo={"Home"} />,
             }}
-            initialParams={{ expenseId: null }}
+            initialParams={{ transactionId: null }}
           ></Stack.Screen>
           <Stack.Screen
             name="Allocation Summary"
@@ -163,7 +163,7 @@ const Routes = ({ onLayoutRootView }) => {
             options={{
               headerLeft: () => <Back navigateTo={"Home"} />,
             }}
-            initialParams={{ expenseId: null }}
+            initialParams={{ transactionId: null }}
           ></Stack.Screen>
           <Stack.Screen
             name="ProfileForm"

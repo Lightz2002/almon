@@ -5,7 +5,7 @@ import { formatDate } from "../../helper";
 import { StyleSheet } from "react-native";
 import { useTheme } from "@rneui/themed";
 
-const HomeExpensesDate = ({ date }) => {
+const HomeTransactionsDate = ({ date }) => {
   const { theme } = useTheme();
   const style = StyleSheet.create({
     container: {
@@ -24,4 +24,4 @@ const HomeExpensesDate = ({ date }) => {
   );
 };
 
-export default HomeExpensesDate;
+export default HomeTransactionsDate;

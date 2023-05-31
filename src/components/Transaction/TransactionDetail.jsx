@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 import Typography from "../../global/Typography";
 import { formatDate, formatNumber } from "../../helper";
 
-const TransactionDetail = ({ visible, setVisible, expense }) => {
+const TransactionDetail = ({ visible, setVisible, transaction }) => {
   const { theme } = useTheme();
   const navigation = useNavigation();
   const style = StyleSheet.create({
@@ -59,7 +59,7 @@ const TransactionDetail = ({ visible, setVisible, expense }) => {
     setVisible(visible => !visible);
   }
 
-  const { amount, date, note, expense_category_name } = expense;
+  const { amount, date, note, transaction_category_name } = transaction;
 
   return (
     <Overlay
@@ -70,7 +70,7 @@ const TransactionDetail = ({ visible, setVisible, expense }) => {
     >
       <Header
         centerComponent={
-          <Typography color={theme.colors.white}>Detail Pengeluaran</Typography>
+          <Typography color={theme.colors.white}>Detail Transaksi</Typography>
         }
         containerStyle={style.header}
         centerContainerStyle={style.headerCenterStyle}
@@ -82,7 +82,7 @@ const TransactionDetail = ({ visible, setVisible, expense }) => {
         <View style={[style.dataContainer]}>
           <View>
             <Typography variant="titleMedium">
-              {expense_category_name}
+              {transaction_category_name}
             </Typography>
             <View style={[style.date]}>
               <Typography variant="text">Tanggal</Typography>
@@ -102,8 +102,8 @@ const TransactionDetail = ({ visible, setVisible, expense }) => {
             type="outline"
             onPress={() => {
               navigation.navigate({
-                name: "Edit Expense",
-                params: { expenseId: expense.id },
+                name: "Edit Transaction",
+                params: { transactionId: transaction.id },
                 merge: true,
               });
             }}

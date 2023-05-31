@@ -21,7 +21,7 @@ const ChangePasswordForm = () => {
       width: "80%",
       position: "absolute",
       top: 50,
-      marginTop: "60%",
+      marginTop: "50%",
       zIndex: 999,
       alignSelf: "center",
       backgroundColor: theme.colors.white,

@@ -31,15 +31,21 @@ const AllocationList = ({ allocations, handleSubmitSalary }) => {
     allocations: {
       paddingVertical: 15,
     },
+
+    emptySalaryContainer: {
+      justifyContent: "center",
+      alignItems: "center",
+      flexGrow: 1,
+    },
   });
 
   let content = (
-    <>
+    <View style={[style.emptySalaryContainer]}>
       <Typography variant="mainMedium">Masukkan Gaji Anda</Typography>
       <Button containerStyle={style.button} onPress={handleSubmitSalary}>
         Simpan
       </Button>
-    </>
+    </View>
   );
 
   if (allocations.length > 0) {

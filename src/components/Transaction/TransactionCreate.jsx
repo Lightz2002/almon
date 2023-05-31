@@ -3,7 +3,7 @@ import { useTheme } from "@rneui/themed";
 import React, { useState } from "react";
 import { View, StyleSheet } from "react-native";
 import Alert from "../../global/Alert";
-import ExpenseForm from "./TransactionForm";
+import TransactionForm from "./TransactionForm";
 
 const TransactionCreate = () => {
   const { theme } = useTheme();
@@ -31,7 +31,7 @@ const TransactionCreate = () => {
 
   return (
     <View style={[style.container]}>
-      <ExpenseForm setAlertVisible={setAlertVisible} />
+      <TransactionForm setAlertVisible={setAlertVisible} />
       <Alert
         style={style.successAlert}
         visible={alertVisible}

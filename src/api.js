@@ -148,7 +148,7 @@ export async function updateSalary(monthlySalary) {
   }
 }
 
-/* Expense */
+/* Transaction */
 export async function expenseBudgetInfo() {
   try {
     const token = await getToken();
@@ -239,7 +239,7 @@ export async function expenseSummary() {
   }
 }
 
-/* expense - category */
+/* transaction - category */
 export async function transactionCategory() {
   try {
     const token = await getToken();

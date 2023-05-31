@@ -9,6 +9,7 @@ import { useUpdateUser } from "../../contexts/UserContext";
 import * as Device from "expo-device";
 import ErrorText from "../../global/ErrorText";
 import ShowPasswordIcon from "../../global/ShowPasswordIcon";
+import Background from "../../global/Background";
 
 const LoginForm = () => {
   const navigation = useNavigation();
@@ -26,18 +27,17 @@ const LoginForm = () => {
 
   const style = StyleSheet.create({
     container: {
-      padding: 30,
+      paddingHorizontal: 30,
+      paddingVertical: 30,
       borderRadius: 30,
-      height: 500,
       width: "80%",
       position: "absolute",
-      top: "50%",
-      marginTop: "-50%",
+      top: 50,
+      marginTop: "50%",
       zIndex: 999,
       alignSelf: "center",
-      justifyContent: "space-evenly",
       backgroundColor: theme.colors.white,
-      shadowColor: "000000",
+      shadowColor: theme.colors.black,
       elevation: 20,
     },
 
@@ -140,7 +140,6 @@ const LoginForm = () => {
       if (data) {
         data.isAuthenticated = true;
         updateUser(data);
-        console.log(+data.monthly_salary);
         let navigateTo = +data.monthly_salary ? "Home" : "Allocation";
         navigation.navigate(navigateTo);
       }
@@ -149,7 +148,7 @@ const LoginForm = () => {
       if (e?.response?.status === 401 || e?.response?.status === 422) {
         setErrors(error => ({
           ...error,
-          username: ["The credentials are wrong"],
+          username: ["Username atau password salah"],
         }));
       }
     }

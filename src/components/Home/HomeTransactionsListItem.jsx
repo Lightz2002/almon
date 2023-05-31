@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native";
 import Typography from "../../global/Typography";
 import { limit, formatNumber, formatDate } from "../../helper";
 
-const HomeExpensesListItem = ({ expense, setSelectedExpense }) => {
+const HomeTransactionsListItem = ({ transaction, setSelectedTransaction }) => {
   const { theme } = useTheme();
   const style = StyleSheet.create({
     card: {
@@ -40,12 +40,12 @@ const HomeExpensesListItem = ({ expense, setSelectedExpense }) => {
   return (
     <Card containerStyle={[style.card]}>
       <TouchableOpacity
-        onPress={() => setSelectedExpense(expense)}
+        onPress={() => setSelectedTransaction(transaction)}
         style={style.touchableContainer}
       >
         <View>
           <Image
-            source={{ uri: expense.expense_category_icon }}
+            source={{ uri: transaction.transaction_category_icon }}
             style={{
               width: 30,
               height: 30,
@@ -55,18 +55,26 @@ const HomeExpensesListItem = ({ expense, setSelectedExpense }) => {
         <View style={[style.categoryContainer]}>
           <View style={[style.cardTitle]}>
             <Typography variant="textMedium">
-              {expense.expense_category_name}
+              {transaction.transaction_category_name}
             </Typography>
           </View>
           <View>
             <Typography variant="small" color={theme.colors.grey}>
-              Catatan: {limit(expense.note, 3)}
+              Catatan: {limit(transaction.note, 3)}
             </Typography>
           </View>
         </View>
         <View style={[style.amountContainer]}>
-          <Typography variant="textMedium" color={theme.colors.error}>
-            - {formatNumber(expense.amount)}
+          <Typography
+            variant="textMedium"
+            color={
+              transaction.type === "income"
+                ? theme.colors.success
+                : theme.colors.error
+            }
+          >
+            {transaction.type === "income" ? "+" : "-"}{" "}
+            {formatNumber(transaction.amount)}
           </Typography>
         </View>
       </TouchableOpacity>
@@ -74,4 +82,4 @@ const HomeExpensesListItem = ({ expense, setSelectedExpense }) => {
   );
 };
 
-export default HomeExpensesListItem;
+export default HomeTransactionsListItem;

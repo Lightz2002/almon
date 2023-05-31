@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import Login from "./Login/Login";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { profile } from "../api";
 import { useUpdateUser, useUser } from "../contexts/UserContext";
 import Loading from "../global/Loading";

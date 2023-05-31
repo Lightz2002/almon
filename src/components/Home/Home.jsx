@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import HomeNavbar from "./HomeNavbar";
-import HomeExpenses from "./HomeExpenses";
+import HomeTransactions from "./HomeTransactions";
 import { profile, expenseBudgetInfo, transactionList } from "../../api";
 import { useUpdateUser } from "../../contexts/UserContext";
 import { useIsFocused } from "@react-navigation/native";
-import ExpenseDetail from "../Transaction/TransactionDetail";
+import TransactionDetail from "../Transaction/TransactionDetail";
 import Loading from "../../global/Loading";
-import HomeExpensesAction from "./HomeExpensesAction";
+import HomeTransactionsAction from "./HomeTransactionsAction";
 import {
-  ExpenseProvider,
-  useExpenses,
-  useUpdateExpense,
-  useUpdateExpenses,
-} from "../../contexts/expenseContext";
+  TransactionProvider,
+  useTransactions,
+  useUpdateTransaction,
+  useUpdateTransactions,
+} from "../../contexts/transactionContext";
 
 const Home = () => {
-  const [selectedExpense, setSelectedExpense] = useState([]);
+  const [selectedTransaction, setSelectedTransaction] = useState([]);
   const [overlayVisible, setOverlayVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [budgetInfo, setBudgetInfo] = useState({});
   const isFocused = useIsFocused();
   const updateUser = useUpdateUser();
-  const expenses = useExpenses();
-  const updateExpenses = useUpdateExpenses();
+  const transactions = useTransactions();
+  const updateTransactions = useUpdateTransactions();
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
       position: "relative",
+      backgroundColor: "white",
     },
 
     loading: {
@@ -53,7 +54,7 @@ const Home = () => {
         let data3 = await transactionList();
         if (data3) {
           data3 = data3.data.data;
-          updateExpenses(data3);
+          updateTransactions(data3);
           setIsLoading(false);
         }
       } catch (e) {
@@ -67,8 +68,8 @@ const Home = () => {
             salary: 0,
             remain: 0,
           });
-          setSelectedExpense([]);
-          updateExpenses({});
+          setSelectedTransaction([]);
+          updateTransactions({});
         }
         setIsLoading(false);
       }
@@ -84,8 +85,8 @@ const Home = () => {
     };
   }, [isFocused]);
 
-  const handleSelectedExpense = expense => {
-    setSelectedExpense(expense);
+  const handleSelectedTransaction = transaction => {
+    setSelectedTransaction(transaction);
     setOverlayVisible(true);
   };
 
@@ -96,15 +97,15 @@ const Home = () => {
   return (
     <View style={[styles.container]}>
       <HomeNavbar budgetInfo={budgetInfo} />
-      <HomeExpenses
+      <HomeTransactions
         isLoading={isLoading}
-        setSelectedExpense={handleSelectedExpense}
+        setSelectedTransaction={handleSelectedTransaction}
       />
-      <HomeExpensesAction />
-      <ExpenseDetail
+      <HomeTransactionsAction />
+      <TransactionDetail
         visible={overlayVisible}
         setVisible={setOverlayVisible}
-        expense={selectedExpense}
+        transaction={selectedTransaction}
       />
     </View>
   );

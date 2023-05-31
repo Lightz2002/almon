@@ -6,7 +6,7 @@ import { UserProvider } from "./src/contexts/UserContext";
 import { fetchFonts } from "./src/helper";
 import Routes from "./Routes";
 import { StatusBar } from "react-native";
-import { ExpenseProvider } from "./src/contexts/expenseContext";
+import { TransactionProvider } from "./src/contexts/transactionContext";
 
 const theme = createTheme({
   lightColors: {
@@ -68,11 +68,11 @@ export default function App() {
     <SafeAreaProvider>
       <ThemeProvider theme={theme}>
         <UserProvider>
-          <ExpenseProvider>
+          <TransactionProvider>
             {/* <StatusBar> */}
             <Routes onLayoutRootView={onLayoutRootView}></Routes>
             {/* </StatusBar> */}
-          </ExpenseProvider>
+          </TransactionProvider>
         </UserProvider>
       </ThemeProvider>
     </SafeAreaProvider>
